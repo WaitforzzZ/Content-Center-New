@@ -19,8 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,6 +41,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+// 配置属性动态刷新
+@RefreshScope
 public class TestController {
 
 	private final ShareMapper shareMapper;
@@ -242,4 +246,12 @@ public class TestController {
 				);
 		return "success";
 	}*/
+
+	@Value("${your.configuration}")
+	private String yourConfiguration;
+
+	@GetMapping("/test-config")
+	public String testConfiguration() {
+		return this.yourConfiguration;
+	}
 }
